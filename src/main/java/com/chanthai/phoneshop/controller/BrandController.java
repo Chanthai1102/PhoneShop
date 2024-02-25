@@ -5,10 +5,12 @@ import com.chanthai.phoneshop.entity.Brand;
 import com.chanthai.phoneshop.mapper.BrandMapper;
 import com.chanthai.phoneshop.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,20 +37,13 @@ public class BrandController {
         return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updateBrand));
     }
     @GetMapping
-    public ResponseEntity<?> getBrands(){
-        List<BrandDTO> list = brandService.getBrands()
+    public ResponseEntity<?> getBrands(@RequestParam Map<String,String> params){
+        Page<Brand> brands  = brandService.getBrands(params);
+        /*List<BrandDTO> list = brandService.getBrands(params)
                 .stream()
                 .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-                .collect(Collectors.toList());
-        return  ResponseEntity.ok(list);
-    }
-    @GetMapping("filter")
-    public ResponseEntity<?> getBrands(@RequestParam("name") String name){
-        List<BrandDTO> list = brandService.getBrands(name)
-                .stream()
-                .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-                .collect(Collectors.toList());
-        return  ResponseEntity.ok(list);
+                .collect(Collectors.toList());*/
+        return  ResponseEntity.ok(brands);
     }
 
 }
