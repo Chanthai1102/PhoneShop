@@ -1,6 +1,7 @@
 package com.chanthai.phoneshop.controller;
 
 import com.chanthai.phoneshop.dto.BrandDTO;
+import com.chanthai.phoneshop.dto.PageDTO;
 import com.chanthai.phoneshop.entity.Brand;
 import com.chanthai.phoneshop.mapper.BrandMapper;
 import com.chanthai.phoneshop.service.BrandService;
@@ -38,12 +39,13 @@ public class BrandController {
     }
     @GetMapping
     public ResponseEntity<?> getBrands(@RequestParam Map<String,String> params){
-        Page<Brand> brands  = brandService.getBrands(params);
+        Page<Brand> page  = brandService.getBrands(params);
+        PageDTO pageDTO = new PageDTO(page);
         /*List<BrandDTO> list = brandService.getBrands(params)
                 .stream()
                 .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
                 .collect(Collectors.toList());*/
-        return  ResponseEntity.ok(brands);
+        return  ResponseEntity.ok(pageDTO);
     }
 
 }
