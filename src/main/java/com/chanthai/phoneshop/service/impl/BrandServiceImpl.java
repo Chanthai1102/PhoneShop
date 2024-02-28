@@ -7,6 +7,9 @@ import com.chanthai.phoneshop.service.BrandService;
 import com.chanthai.phoneshop.service.util.PageUtil;
 import com.chanthai.phoneshop.spec.BrandFilter;
 import com.chanthai.phoneshop.spec.BrandSpec;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BrandServiceImpl implements BrandService {
     @Autowired
-    private BrandRepository brandRepository;
+    private final BrandRepository brandRepository;
     @Override
     public Brand create(Brand brand) {
         return brandRepository.save(brand);
