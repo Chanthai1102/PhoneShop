@@ -1,6 +1,7 @@
 package com.chanthai.phoneshop.service;
 
 import com.chanthai.phoneshop.entity.Brand;
+import com.chanthai.phoneshop.exception.ResourceNotFoundException;
 import com.chanthai.phoneshop.repository.BrandRepository;
 import com.chanthai.phoneshop.service.impl.BrandServiceImpl;
 import org.h2.command.dml.MergeUsing;
@@ -76,7 +77,8 @@ public class BrandServiceTest {
         //when
         when(brandRepository.findById(2)).thenReturn(Optional.empty());
         //brandService.getById(2);
-
+        assertThatThrownBy(() -> brandService.getById(2))
+                .isInstanceOf(ResourceNotFoundException.class);
         //then
     }
 }
