@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/models")
 public class ModelController {
     private final ModelService modelService;
+    private final ModelMapper modelMapper;
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ModelDTO modelDTO){
-        Model model = ModelMapper.INSTANCE.toModel(modelDTO);
+        Model model = modelMapper.toModel(modelDTO);
         model = modelService.save(model);
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(modelMapper.toModelDTO(model));
     }
 }
