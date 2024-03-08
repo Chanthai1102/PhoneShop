@@ -9,11 +9,8 @@ import com.chanthai.phoneshop.spec.BrandFilter;
 import com.chanthai.phoneshop.spec.BrandSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
