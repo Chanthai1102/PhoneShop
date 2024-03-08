@@ -2,6 +2,10 @@ package com.chanthai.phoneshop.spec;
 
 import com.chanthai.phoneshop.entity.Brand;
 import lombok.Data;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
