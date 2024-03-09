@@ -1,6 +1,4 @@
 package com.chanthai.phoneshop.entity;
-
-
 import lombok.Data;
 
 import javax.persistence.*;
