@@ -61,14 +61,8 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>3.0.0</version>
+            <groupId>org.liquibase</groupId>
+          <artifactId>liquibase-core</artifactId>
         </dependency>
     </dependencies>
 
@@ -112,7 +106,17 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://localhost:5432/phoneshop_db</url>
+                    <username>admin</username>
+                    <password>admin</password>
+                    <outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.yml</outputChangeLogFile>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
