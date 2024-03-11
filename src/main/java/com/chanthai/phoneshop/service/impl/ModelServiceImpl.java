@@ -20,7 +20,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<Model> getByBrand(Integer brandId) {
+    public List<Model> getByBrand(Long brandId) {
         return modelRepository.findByBrandId(brandId);
     }
 }
