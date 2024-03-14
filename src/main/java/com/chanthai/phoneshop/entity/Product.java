@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "tbProduct")
+@Table(name = "tbProduct", uniqueConstraints = {@UniqueConstraint(columnNames = {"model_id","color_id"})})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
