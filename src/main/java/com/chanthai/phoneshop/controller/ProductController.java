@@ -1,5 +1,6 @@
 package com.chanthai.phoneshop.controller;
 
+import com.chanthai.phoneshop.dto.PriceDTO;
 import com.chanthai.phoneshop.dto.ProductDTO;
 import com.chanthai.phoneshop.entity.Product;
 import com.chanthai.phoneshop.dto.ProductImportDTO;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 public class ProductController {
     private final ProductMapper productMapper;
     private final ProductService productService;
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<?> create(@RequestBody ProductDTO productDTO){
         Product product = productMapper.toProduct(productDTO);
         product = productService.create(product);
@@ -26,6 +27,12 @@ public class ProductController {
     @PostMapping("importProduct")
     public ResponseEntity<?> importProduct(@RequestBody @Valid ProductImportDTO productImportDTO){
         productService.importProduct(productImportDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("{productId}/setSalePrice")
+    public ResponseEntity<?> setSalePrice(@PathVariable Long productId, @RequestBody PriceDTO priceDTO){
+        productService.setSalePrice(productId,priceDTO.getPrice());
         return ResponseEntity.ok().build();
     }
 }
