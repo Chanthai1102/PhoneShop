@@ -3,6 +3,7 @@ package com.chanthai.phoneshop.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Data
@@ -32,6 +33,7 @@ public class Product {
     private Color color;
 
     @Column(name = "sale_price")
+    @DecimalMin(value = "0.00001",message = "Price Must Be Greater than 0")
     private BigDecimal salePrice;
 
 }
