@@ -6,6 +6,7 @@ import com.chanthai.phoneshop.entity.Product;
 import com.chanthai.phoneshop.entity.Sale;
 import com.chanthai.phoneshop.entity.SaleDetail;
 import com.chanthai.phoneshop.exception.APIException;
+import com.chanthai.phoneshop.exception.ResourceNotFoundException;
 import com.chanthai.phoneshop.repository.ProductRepository;
 import com.chanthai.phoneshop.repository.SaleDetailRepository;
 import com.chanthai.phoneshop.repository.SaleRepository;
@@ -73,25 +74,31 @@ public class SaleServiceImpl implements SaleService {
 
     }
 
-    private void saveSale(SaleDTO saleDTO){
-        Sale sale = new Sale();
-        sale.setSoldDate(saleDTO.getSaleDate());
+    @Override
+    public Sale getById(Long saleId) {
+        return saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sale",saleId));
+    }
+
+    @Override
+    public void cancelSale(Long saleId) {
+        //Update Sale Status
+        Sale sale = getById(saleId);
+        sale.setActive(false);
         saleRepository.save(sale);
 
-        //SaleDatail
-//        saleDTO.getProducts().forEach( ps -> {
-//
-//        });
-        SaleDetail saleDetail = new SaleDetail();
+        //Update stock
+        List<SaleDetail> saleDetails = saleDetailRepository.findBySaleId(saleId);
+        List<Long> productIds = saleDetails.stream()
+                        .map(sd -> sd.getProduct().getId())
+                        .toList();
+        List<Product> products = productRepository.findAllById(productIds);
+        Map<Long, Product> productMap = products.stream()
+                        .collect(Collectors.toMap(Product::getId, Function.identity()));
+        saleDetails.forEach(sd -> {
+            Product product = sd.getProduct();
 
-    }
-
-    private void validate(SaleDTO saleDTO){
-        saleDTO.getProducts().forEach(ps -> {
-            Product product = productService.getByID(ps.getProductId());
-            if (product.getAvailableUnit() < ps.getNumberOfUnit()){
-                throw new APIException(HttpStatus.BAD_REQUEST,"Product [%s] is not egnouh".formatted(product.getName()));
-            }
         });
     }
+
 }

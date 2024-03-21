@@ -1,9 +1,6 @@
 package com.chanthai.phoneshop.controller;
 
-import com.chanthai.phoneshop.dto.ProductDTO;
-
 import com.chanthai.phoneshop.dto.SaleDTO;
-import com.chanthai.phoneshop.service.ProductService;
 import com.chanthai.phoneshop.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,10 @@ public class SaleController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody SaleDTO saleDTO){
         saleService.Sale(saleDTO);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("{saleId}/cancel")
+    public ResponseEntity<?> cancelSale(){
         return ResponseEntity.ok().build();
     }
 }
