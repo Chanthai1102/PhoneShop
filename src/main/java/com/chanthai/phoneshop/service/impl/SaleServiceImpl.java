@@ -96,8 +96,9 @@ public class SaleServiceImpl implements SaleService {
         Map<Long, Product> productMap = products.stream()
                         .collect(Collectors.toMap(Product::getId, Function.identity()));
         saleDetails.forEach(sd -> {
-            Product product = sd.getProduct();
-
+            Product product = productMap.get(sd.getProduct().getId());
+            product.setAvailableUnit(product.getAvailableUnit()+sd.getUnit());
+            productRepository.save(product);
         });
     }
 
