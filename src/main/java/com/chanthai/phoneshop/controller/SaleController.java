@@ -19,7 +19,8 @@ public class SaleController {
         return ResponseEntity.ok().build();
     }
     @PutMapping("{saleId}/cancel")
-    public ResponseEntity<?> cancelSale(){
+    public ResponseEntity<?> cancelSale(@PathVariable Long saleId){
+        saleService.cancelSale(saleId);
         return ResponseEntity.ok().build();
     }
 }
