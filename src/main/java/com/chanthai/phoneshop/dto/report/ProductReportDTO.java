@@ -1,4 +1,4 @@
-package com.chanthai.phoneshop.dto;
+package com.chanthai.phoneshop.dto.report;
 
 import lombok.Data;
 
