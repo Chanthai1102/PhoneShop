@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -108,7 +105,7 @@ public class ReportServiceImpl implements ReportService {
             Product product = productMap.get(entry.getKey().getId());
             List<ProductImportHistory> importProduct = entry.getValue();
             int totalUnit = importProduct.stream()
-                    .mapToInt(pi -> pi.getImportUnit())
+                    .mapToInt(ProductImportHistory::getImportUnit)
                     .sum();
             double totalAmount = importProduct.stream()
                     .mapToDouble(pi -> pi.getImportUnit() * pi.getPricePerUnit().doubleValue())
@@ -120,7 +117,6 @@ public class ReportServiceImpl implements ReportService {
             expenseReportDTO.setTotalAmount(BigDecimal.valueOf(totalAmount));
             expenseReportDTOS.add(expenseReportDTO);
         }
-
         return expenseReportDTOS;
     }
 }
