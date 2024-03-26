@@ -1,5 +1,6 @@
 package com.chanthai.phoneshop.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Data
+@Builder
 @Entity
 @Table(name = "tbProduct", uniqueConstraints = {@UniqueConstraint(columnNames = {"model_id","color_id"})})
 public class Product {
