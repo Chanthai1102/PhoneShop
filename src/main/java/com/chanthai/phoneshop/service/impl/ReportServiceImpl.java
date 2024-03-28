@@ -94,12 +94,12 @@ public class ReportServiceImpl implements ReportService {
 
         List<Product> products = productRepository.findAllById(productIds);
         Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(product -> product.getId(),product -> product));
+                .collect(Collectors.toMap(Product::getId, p-> p));
         //Map<Product,List<ProductImportHistory>>
         Map<Product,List<ProductImportHistory>> importMap = importHistories.stream()
-                .collect(Collectors.groupingBy(pi -> pi.getProduct()));
+                .collect(Collectors.groupingBy(ProductImportHistory::getProduct));
 
-        var expenseReportDTOS = new ArrayList<ExpenseReportDTO>();
+        var expenseReportDTOs = new ArrayList<ExpenseReportDTO>();
 
         for (var entry : importMap.entrySet()){
             Product product = productMap.get(entry.getKey().getId());
@@ -115,8 +115,8 @@ public class ReportServiceImpl implements ReportService {
             expenseReportDTO.setProductName(product.getName());
             expenseReportDTO.setTotalUnit(totalUnit);
             expenseReportDTO.setTotalAmount(BigDecimal.valueOf(totalAmount));
-            expenseReportDTOS.add(expenseReportDTO);
+            expenseReportDTOs.add(expenseReportDTO);
         }
-        return expenseReportDTOS;
+        return expenseReportDTOs;
     }
 }
