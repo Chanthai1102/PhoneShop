@@ -52,8 +52,8 @@ public class ReportServiceTest {
                 .thenReturn(importHistories);
         when(productRepository.findAllById(anySet()))
                 .thenReturn(products);
-        List<ExpenseReportDTO> expenseReports = reportService.getExpenseReport(LocalDate.now().minusMonths(0),LocalDate.now());
+        List<ExpenseReportDTO> expenseReports = reportService.getExpenseReport(LocalDate.now().minusMonths(1),LocalDate.now());
         //then
-        assertEquals(1,expenseReports.size());
+        assertEquals(2,expenseReports.size());
     }
 }
