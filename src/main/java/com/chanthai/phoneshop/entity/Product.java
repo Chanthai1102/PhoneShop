@@ -1,14 +1,18 @@
 package com.chanthai.phoneshop.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
 @Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "tbProduct", uniqueConstraints = {@UniqueConstraint(columnNames = {"model_id","color_id"})})
 public class Product {
