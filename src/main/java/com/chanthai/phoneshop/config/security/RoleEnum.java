@@ -22,6 +22,8 @@ public enum RoleEnum {
         Set<SimpleGrantedAuthority> grantedAuthorities =  this.permissionEnumSet.stream()
                 .map(permissionEnum -> new SimpleGrantedAuthority(permissionEnum.getDescription()))
                 .collect(Collectors.toSet());
+        SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + this.name());
+        grantedAuthorities.add(role);
         return grantedAuthorities;
     }
 }
