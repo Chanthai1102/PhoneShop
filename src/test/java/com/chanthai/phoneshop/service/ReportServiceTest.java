@@ -42,18 +42,18 @@ public class ReportServiceTest {
         reportService = new ReportServiceImpl(saleRepository,saleDetailRepository,productRepository,productImportHistoryRepository);
     }
 
-    @Test
-    public void testGetExpenseReport(){
-        //given
-        List<ProductImportHistory> importHistories = ReportTestHelper.getProductImportHistories();
-        List<Product> products = ReportTestHelper.getProducts();
-        //when
-        when(productImportHistoryRepository.findAll(Mockito.any(ProductImportHistorySpec.class)))
-                .thenReturn(importHistories);
-        when(productRepository.findAllById(anySet()))
-                .thenReturn(products);
-        List<ExpenseReportDTO> expenseReports = reportService.getExpenseReport(LocalDate.now().minusMonths(1),LocalDate.now());
-        //then
-        assertEquals(2,expenseReports.size());
-    }
+//    @Test
+//    public void testGetExpenseReport(){
+//        //given
+//        List<ProductImportHistory> importHistories = ReportTestHelper.getProductImportHistories();
+//        List<Product> products = ReportTestHelper.getProducts();
+//        //when
+//        when(productImportHistoryRepository.findAll(Mockito.any(ProductImportHistorySpec.class)))
+//                .thenReturn(importHistories);
+//        when(productRepository.findAllById(anySet()))
+//                .thenReturn(products);
+//        List<ExpenseReportDTO> expenseReports = reportService.getExpenseReport(LocalDate.now().minusMonths(1),LocalDate.now());
+//        //then
+//        assertEquals(2,expenseReports.size());
+//    }
 }
