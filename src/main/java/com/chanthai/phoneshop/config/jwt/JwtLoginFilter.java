@@ -38,7 +38,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String secretKey = "asdfaseif@#$%@#$";
+        String secretKey = "asdfaseif@#$%@#$asdfaseif@#$%@#$asdfaseif@#$%@#$";
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .setIssuedAt(new Date())
@@ -47,6 +47,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setIssuer("chanthai.com")
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
-        response.setHeader("Authorization",token);
+        response.setHeader("Authorization","Bearer " + token);
     }
 }
