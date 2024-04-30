@@ -1,6 +1,7 @@
 package com.chanthai.phoneshop.config.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -31,19 +32,24 @@ public class TokenVerifyFilter extends OncePerRequestFilter {
         }
         String token = authorizationHeader.replace("Bearer ", "");
         String secretKey = "asdfaseif@#$%@#$asdfaseif@#$%@#$asdfaseif@#$%@#$";
-        Jws<Claims> claimsJws = Jwts.parser()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                .parseClaimsJws(token);
-        Claims body = claimsJws.getBody();
-        String username = body.getSubject();
-        List<Map<String,String>> authorities = (List<Map<String, String>>) body.get("authoreities");
-        Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
-                .map(x -> new SimpleGrantedAuthority(x.get("authority")))
-                .collect(Collectors.toSet());
+        try{
+            Jws<Claims> claimsJws = Jwts.parser()
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .parseClaimsJws(token);
+            Claims body = claimsJws.getBody();
+            String username = body.getSubject();
+            List<Map<String,String>> authorities = (List<Map<String, String>>) body.get("authoreities");
+            Set<SimpleGrantedAuthority> grantedAuthorities = authorities.stream()
+                    .map(x -> new SimpleGrantedAuthority(x.get("authority")))
+                    .collect(Collectors.toSet());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,grantedAuthorities);
-        SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,grantedAuthorities);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
+        }catch (ExpiredJwtException e){
+            e.printStackTrace();
+        }
+
         filterChain.doFilter(request,response);
     }
 }
