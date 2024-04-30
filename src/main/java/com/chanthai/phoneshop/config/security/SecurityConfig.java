@@ -6,9 +6,11 @@ import com.chanthai.phoneshop.config.jwt.TokenVerifyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,7 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -26,15 +28,16 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
         securedEnabled = true,
         jsr250Enabled = true
 )
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserDetailsService userDetailsService;
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
+    private AuthenticationConfiguration authenticationConfiguration;
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf().disable()
-                .addFilter(new JwtLoginFilter(authenticationManager()))
+                .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
                 .addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -42,25 +45,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .anyRequest()
                 .authenticated();
+
+        return httpSecurity.build();
     }
 
-//    @Bean
-//    @Override
-//    protected UserDetailsService userDetailsService(){
-//         UserDetails user = User.builder()
-//                .username("thai")
-//                .password(passwordEncoder.encode("thai123"))
-//                 .authorities(RoleEnum.ADMIN.getAuthorities())
-//                .build();
-//
-//         UserDetailsService userDetailsService = new InMemoryUserDetailsManager(user);
-//        return userDetailsService;
-//    }
-
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(getAuthenticationProvider());
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
     }
     @Bean
     public AuthenticationProvider getAuthenticationProvider(){
