@@ -4,6 +4,7 @@ import com.chanthai.phoneshop.config.security.RoleEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -17,10 +18,10 @@ public class User {
     private String lastName;
     private String username;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private RoleEnum role;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enable;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 }
