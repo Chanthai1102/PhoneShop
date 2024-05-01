@@ -1,6 +1,7 @@
 package com.chanthai.phoneshop.config.security;
 
 
+import com.chanthai.phoneshop.config.FilterChainExceptionHandler;
 import com.chanthai.phoneshop.config.jwt.JwtLoginFilter;
 import com.chanthai.phoneshop.config.jwt.TokenVerifyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,15 @@ public class SecurityConfig {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private FilterChainExceptionHandler filterChainExceptionHandler;
     private AuthenticationConfiguration authenticationConfiguration;
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf().disable()
                 .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
+                .addFilterBefore(filterChainExceptionHandler, JwtLoginFilter.class)
                 .addFilterAfter(new TokenVerifyFilter(), JwtLoginFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
