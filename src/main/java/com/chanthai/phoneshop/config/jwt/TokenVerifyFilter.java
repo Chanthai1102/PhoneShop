@@ -1,10 +1,13 @@
 package com.chanthai.phoneshop.config.jwt;
 
+import com.chanthai.phoneshop.exception.APIException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +25,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 public class TokenVerifyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -47,7 +52,8 @@ public class TokenVerifyFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
         }catch (ExpiredJwtException e){
-            e.printStackTrace();
+            log.info(e.getMessage());
+            throw new APIException(HttpStatus.BAD_REQUEST,e.getMessage());
         }
 
         filterChain.doFilter(request,response);
